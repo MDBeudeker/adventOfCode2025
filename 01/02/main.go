@@ -15,7 +15,7 @@ func check(e error) {
 }
 
 func main() {
-	dat, err := os.ReadFile("example.txt")
+	dat, err := os.ReadFile("input.txt")
 	check(err)
 	position, total := 50, 0
 
@@ -32,31 +32,34 @@ func main() {
 	}
 }
 
-func turnTheKnob(line string, position int, total int) (int, int) {
+func turnTheKnob(line string, initialposition int, total int) (int, int) {
 	value, err := strconv.Atoi(line[1:len(line)])
 	check(err)
-	ex2 := true
 	// increase := false
-
+	direction := 1
 	if line[0] == 'L' {
-		position = position - value
-	} else if line[0] == 'R' {
-		position = position + value
+		direction = -1
 	}
-	for position > 99 {
+
+	for value > 99 {
+		total += 1
+		value -= 100
+	}
+
+	position := initialposition + (direction * value)
+
+	if position > 99 {
 		position = position - 100
-		if ex2 {
+		if initialposition != 0 {
 			total += 1
 		}
-	}
-	for position < 0 {
+	} else if position < 0 {
 		position = position + 100
-		if ex2 {
+		if initialposition != 0 {
 			total += 1
 		}
-	}
-	if position == 0 {
-		// total += 1
+	} else if position == 0 {
+		total += 1
 	}
 
 	// if increase {

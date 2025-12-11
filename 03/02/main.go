@@ -38,11 +38,14 @@ func main() {
 			counter += 1
 			// fmt.Printf("newvalue is %#v\n", (newnewvalue))
 			fmt.Print((newnewvalue))
+
+			fmt.Printf("adding %#v to %#v", newnewvalue, total)
 			fmt.Print("\n")
 		} else {
 			fmt.Print((newvalue))
 			fmt.Print("\n")
-			lastvalue, _ := strconv.Atoi(newvalue)
+			lastvalue, _ := strconv.ParseInt(newvalue, 10, 64)
+			fmt.Printf("adding %#v to %#v", lastvalue, total)
 			counter += 1
 			total += int64(lastvalue)
 		}

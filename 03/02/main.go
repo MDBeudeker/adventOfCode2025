@@ -82,36 +82,57 @@ func findstart(value string) (int, int) {
 // 	return newvalue
 // }
 
+// func reprocess(value string, startindex int) string {
+// 	var newvalue string = ""
+// 	// fmt.Printf("chopping up string %#v with length %#v\n", value, len(value))
+// 	for len(newvalue) != 12 { // final newstring HAS to have length 12
+// 		for j := 1; j <= startindex; {
+// 			index := 0
+
+// 			for index != -1 {
+// 				// fmt.Printf("looking for a %#v in string %#v\n", j, value)
+// 				index = strings.Index(value, strconv.Itoa(j))
+// 				if index == -1 {
+// 					// if you cant find the index, add 1 to the thing
+// 					j += 1
+// 				} else {
+// 					newvaluea := value[:index]
+// 					newvalueb := value[index+1:]
+// 					newvalue = newvaluea + newvalueb
+// 					value = newvalue
+// 					if len(value) == 12 {
+// 						// fmt.Printf("newvalue: %#v\n", newvalue)
+
+// 						return newvalue
+// 					}
+// 				}
+// 			}
+
+// 		}
+// 	}
+// 	// fmt.Printf("newvalue: %#v\n", newvalue)
+// 	return newvalue
+// }
+
 func reprocess(value string, startindex int) string {
-	var newvalue string = ""
-	// fmt.Printf("chopping up string %#v with length %#v\n", value, len(value))
-	for len(newvalue) != 12 { // final newstring HAS to have length 12
-		for j := 1; j <= startindex; {
-			index := 0
+	// keep exactly 12 digits
+	remove := len(value) - 12
+	result := make([]byte, 0, len(value))
 
-			for index != -1 {
-				// fmt.Printf("looking for a %#v in string %#v\n", j, value)
-				index = strings.Index(value, strconv.Itoa(j))
-				if index == -1 {
-					// if you cant find the index, add 1 to the thing
-					j += 1
-				} else {
-					newvaluea := value[:index]
-					newvalueb := value[index+1:]
-					newvalue = newvaluea + newvalueb
-					value = newvalue
-					if len(value) == 12 {
-						// fmt.Printf("newvalue: %#v\n", newvalue)
+	for i := 0; i < len(value); i++ {
+		c := value[i]
 
-						return newvalue
-					}
-				}
-			}
-
+		for len(result) > 0 && result[len(result)-1] < c && remove > 0 {
+			// remove smaller digits to make space for bigger ones
+			result = result[:len(result)-1]
+			remove--
 		}
+
+		result = append(result, c)
 	}
-	// fmt.Printf("newvalue: %#v\n", newvalue)
-	return newvalue
+
+	// result may be longer than 12 due to remaining removals
+	return string(result[:12])
 }
 
 // 987654321111+ 811111111119 + 434234234278 +888911112111
